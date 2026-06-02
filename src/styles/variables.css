@@ -1,0 +1,24 @@
+:root {
+  --color-primary: #0f6e56;
+  --color-accent: #e85d24;
+  --color-surface: #f7f6f1;
+  --color-surface-alt: #ffffff;
+  --color-text: #2c2c2a;
+  --color-muted: #5d5d58;
+  --color-success: #1f8f6c;
+  --color-warning: #d18f33;
+  --color-danger: #d13f24;
+  --shadow-soft: 0 16px 40px rgba(17, 21, 23, 0.08);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --radius: 24px;
+  --radius-sm: 14px;
+  --max-width: 1220px;
+  --transition: 220ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    scroll-behavior: auto;
+    transition-duration: 0ms;
+  }
+}

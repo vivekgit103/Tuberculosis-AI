@@ -1,0 +1,32 @@
+export const mockHistory = [
+  {
+    id: 'a0f1',
+    name: 'Anna Reyes',
+    email: 'anna.reyes@example.com',
+    date: '2026-05-22',
+    score: 74,
+    category: 'High',
+    factors: ['Prolonged cough', 'HIV positive', 'Weight loss'],
+    values: { coughDuration: 6, nightSweats: true, weightLoss: true, fever: true, hivStatus: 'positive', diabetes: 'no', smoking: 'no', chestPain: true, fatigue: true },
+  },
+  {
+    id: 'b4d2',
+    name: 'James Carter',
+    email: 'james.carter@example.com',
+    date: '2026-05-14',
+    score: 42,
+    category: 'Medium',
+    factors: ['Prolonged cough', 'Weight loss'],
+    values: { coughDuration: 4, nightSweats: false, weightLoss: true, fever: false, hivStatus: 'negative', diabetes: 'yes', smoking: 'yes', chestPain: false, fatigue: false },
+  },
+  {
+    id: 'c6f8',
+    name: 'Mina Lopez',
+    email: 'mina.lopez@example.com',
+    date: '2026-04-30',
+    score: 28,
+    category: 'Low',
+    factors: ['Night sweats', 'Chest pain'],
+    values: { coughDuration: 2, nightSweats: true, weightLoss: false, fever: false, hivStatus: 'negative', diabetes: 'no', smoking: 'no', chestPain: true, fatigue: true },
+  },
+];
