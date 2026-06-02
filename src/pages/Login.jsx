@@ -9,7 +9,7 @@ export const Login = () => {
   const [message, setMessage] = useState('');
 
   const handleSubmit = async (values) => {
-    const result = login(values);
+    const result = await login(values);
     if (result.error) {
       setMessage(result.error);
       return;

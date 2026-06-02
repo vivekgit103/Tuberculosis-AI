@@ -1,48 +1,60 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { getItem, setItem, removeItem } from '../utils/storage.js';
+import axios from 'axios';
 
 const AuthContext = createContext(null);
 
+const API = axios.create({ baseURL: import.meta.env.VITE_API_URL || '' });
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    const session = getItem('tbGuardianSession');
-    if (session) {
-      setUser(session);
+    const token = localStorage.getItem('tbToken');
+    if (!token) {
+      setInitialized(true);
+      return;
     }
+    API.get('/api/dashboard', { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => {
+        setUser(res.data.user);
+      })
+      .catch(() => {
+        localStorage.removeItem('tbToken');
+        setUser(null);
+      })
+      .finally(() => setInitialized(true));
   }, []);
 
-  const login = ({ email, password }) => {
-    const users = getItem('tbGuardianUsers', []);
-    const hashed = btoa(password);
-    const account = users.find((item) => item.email === email && item.password === hashed);
-    if (!account) {
-      return { error: 'Invalid credentials' };
+  const login = async ({ email, password }) => {
+    try {
+      const res = await API.post('/api/login', { email, password });
+      const { token, user: userInfo } = res.data;
+      localStorage.setItem('tbToken', token);
+      setUser(userInfo);
+      return { success: true };
+    } catch (err) {
+      const message = err?.response?.data?.message || 'Login failed';
+      return { error: message };
     }
-    const active = { name: account.name, email: account.email, role: account.email.includes('admin@') ? 'admin' : 'user' };
-    setItem('tbGuardianSession', active);
-    setUser(active);
-    return { success: true };
   };
 
-  const register = ({ name, email, password }) => {
-    const users = getItem('tbGuardianUsers', []);
-    const existing = users.some((userItem) => userItem.email === email);
-    if (existing) {
-      return { error: 'Email already registered' };
+  const register = async ({ name, email, password }) => {
+    try {
+      await API.post('/api/register', { name, email, password });
+      return { success: true };
+    } catch (err) {
+      const message = err?.response?.data?.message || 'Registration failed';
+      return { error: message };
     }
-    const account = { name, email, password: btoa(password) };
-    setItem('tbGuardianUsers', [...users, account]);
-    return { success: true };
   };
 
   const logout = () => {
-    removeItem('tbGuardianSession');
+    localStorage.removeItem('tbToken');
     setUser(null);
   };
 
-  const value = useMemo(() => ({ user, login, register, logout }), [user]);
+  const value = useMemo(() => ({ user, initialized, login, register, logout }), [user, initialized]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

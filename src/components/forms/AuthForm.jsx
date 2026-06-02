@@ -6,6 +6,8 @@ export const AuthForm = ({ mode, onSubmit }) => {
   const isRegister = mode === 'register';
   const [values, setValues] = useState({ name: '', email: '', password: '', confirmPassword: '' });
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleChange = (field, value) => {
     setValues((prev) => ({ ...prev, [field]: value }));
@@ -38,14 +40,24 @@ export const AuthForm = ({ mode, onSubmit }) => {
 
       <div className="input-group">
         <label htmlFor="password">Password</label>
-        <input id="password" type="password" value={values.password} onChange={(e) => handleChange('password', e.target.value)} placeholder="Enter password" />
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <input id="password" type={showPassword ? 'text' : 'password'} value={values.password} onChange={(e) => handleChange('password', e.target.value)} placeholder="Enter password" style={{ flex: 1 }} />
+          <button type="button" aria-label="Toggle password visibility" onClick={() => setShowPassword((s) => !s)} style={{ marginLeft: 8 }}>
+            {showPassword ? '🙈' : '👁️'}
+          </button>
+        </div>
         {errors.password && <span className="input-error">{errors.password}</span>}
       </div>
 
       {isRegister && (
         <div className="input-group">
           <label htmlFor="confirmPassword">Confirm password</label>
-          <input id="confirmPassword" type="password" value={values.confirmPassword} onChange={(e) => handleChange('confirmPassword', e.target.value)} placeholder="Repeat password" />
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <input id="confirmPassword" type={showConfirm ? 'text' : 'password'} value={values.confirmPassword} onChange={(e) => handleChange('confirmPassword', e.target.value)} placeholder="Repeat password" style={{ flex: 1 }} />
+            <button type="button" aria-label="Toggle confirm password visibility" onClick={() => setShowConfirm((s) => !s)} style={{ marginLeft: 8 }}>
+              {showConfirm ? '🙈' : '👁️'}
+            </button>
+          </div>
           {errors.confirmPassword && <span className="input-error">{errors.confirmPassword}</span>}
         </div>
       )}

@@ -14,10 +14,9 @@ import { Register } from './pages/Register.jsx';
 import { Admin } from './pages/Admin.jsx';
 
 const RequireAuth = ({ children }) => {
-  const { user } = useAuth();
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
+  const { user, initialized } = useAuth();
+  if (!initialized) return null;
+  if (!user) return <Navigate to="/login" replace />;
   return children;
 };
 

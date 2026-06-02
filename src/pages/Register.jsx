@@ -9,7 +9,7 @@ export const Register = () => {
   const [message, setMessage] = useState('');
 
   const handleSubmit = async (values) => {
-    const result = register(values);
+    const result = await register(values);
     if (result.error) {
       setMessage(result.error);
       return;
