@@ -17,29 +17,39 @@ app.use('/api', dashboardRoutes);
 const PORT = process.env.PORT || 5000;
 
 async function start() {
-  try {
-    if (!process.env.MONGO_URI) {
-      console.error('❌ Missing MONGO_URI in environment');
-      process.exit(1);
-    }
-    if (!process.env.JWT_SECRET) {
-      console.error('❌ Missing JWT_SECRET in environment');
-      process.exit(1);
-    }
-    
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log('✅ Connected to MongoDB Atlas');
-    
-    app.listen(PORT, () => {
-      console.log(`✅ Backend running on http://localhost:${PORT}`);
-    });
-  } catch (err) {
-    console.error('❌ Failed to start server:', err.message);
-    process.exit(1);
+  const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_for_local_testing_purposes';
+  if (!process.env.JWT_SECRET) {
+    console.warn('⚠️ Missing JWT_SECRET in environment. Using default fallback key for local dev.');
+    process.env.JWT_SECRET = JWT_SECRET;
   }
+
+  let mongoConnected = false;
+  if (process.env.MONGO_URI) {
+    try {
+      console.log('🔄 Connecting to MongoDB...');
+      await mongoose.connect(process.env.MONGO_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        serverSelectionTimeoutMS: 3000, // 3 seconds timeout
+      });
+      console.log('✅ Connected to MongoDB Atlas');
+      mongoConnected = true;
+      global.useLocalDB = false;
+    } catch (err) {
+      console.warn(`⚠️ MongoDB connection failed (${err.message}). Falling back to local JSON database.`);
+    }
+  } else {
+    console.warn('⚠️ MONGO_URI not provided. Falling back to local JSON database.');
+  }
+
+  if (!mongoConnected) {
+    global.useLocalDB = true;
+    console.log('📁 Local JSON database enabled (backend/data/users.json)');
+  }
+
+  app.listen(PORT, () => {
+    console.log(`✅ Backend running on http://localhost:${PORT}`);
+  });
 }
 
 start();

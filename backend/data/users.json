@@ -16,5 +16,12 @@
     "name": "pooji",
     "email": "dayyalapoojitha09@gmail.com",
     "password": "$2b$10$8K4SZdQ5nF7Cy9Z2VGLV3OKUTdNAewZFNmIZXaZczlU8eIxZdppmm"
+  },
+  {
+    "_id": "z9id90j",
+    "name": "Test User",
+    "email": "test@example.com",
+    "password": "$2b$10$9/GQ.vXDs.c/QUL26Scm4uN.K4LYUM7akKUgSbpVTiQBUuor0bxV6",
+    "createdAt": "2026-06-04T17:05:25.713Z"
   }
 ]

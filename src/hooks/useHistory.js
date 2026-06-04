@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 import { getItem, setItem } from '../utils/storage.js';
 import { mockHistory } from '../data/mockHistory.js';
 
@@ -7,12 +7,12 @@ const historyKey = 'tbGuardianHistory';
 export const useHistory = () => {
   const [filter, setFilter] = useState({ search: '', category: '' });
 
-  const loadHistory = () => {
+  const loadHistory = useCallback(() => {
     const stored = getItem(historyKey, null);
     if (stored && stored.length) return stored;
     setItem(historyKey, mockHistory);
     return mockHistory;
-  };
+  }, []);
 
   const history = useMemo(() => {
     const data = loadHistory();

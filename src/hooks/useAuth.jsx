@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
       setUser(userInfo);
       return { success: true };
     } catch (err) {
-      const message = err?.response?.data?.message || 'Login failed';
+      const message = err?.response?.data?.error || err?.response?.data?.message || 'Login failed';
       return { error: message };
     }
   };
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
       await API.post('/api/register', { name, email, password });
       return { success: true };
     } catch (err) {
-      const message = err?.response?.data?.message || 'Registration failed';
+      const message = err?.response?.data?.error || err?.response?.data?.message || 'Registration failed';
       return { error: message };
     }
   };

@@ -26,11 +26,13 @@ export const AuthForm = ({ mode, onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit} className="card card-inner" style={{ maxWidth: 520, margin: '0 auto' }}>
-      <div className="input-group">
-        <label htmlFor="name">Name</label>
-        <input id="name" type="text" value={values.name} onChange={(e) => handleChange('name', e.target.value)} placeholder="Your name" />
-        {errors.name && <span className="input-error">{errors.name}</span>}
-      </div>
+      {isRegister && (
+        <div className="input-group">
+          <label htmlFor="name">Name</label>
+          <input id="name" type="text" value={values.name} onChange={(e) => handleChange('name', e.target.value)} placeholder="Your name" />
+          {errors.name && <span className="input-error">{errors.name}</span>}
+        </div>
+      )}
 
       <div className="input-group">
         <label htmlFor="email">Email</label>
